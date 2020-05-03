@@ -8,34 +8,63 @@ public class PlayerControls : MonoBehaviour {
     public KeyCode moveDown;
     public KeyCode moveLeft;
     public KeyCode moveRight;
+    public KeyCode rotateLeft;
+    public KeyCode rotateRight;
 
     public float speed = 10f;
 
     private Rigidbody2D rb2D;
 
-    private void Start()
+    void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
     }
+    
     // Update is called once per frame
     void Update ()
     {
         /*TODO: 1.MoveShip: A,W,S,D
-         *      2.Rotate ship: Mouse
+         *      2.Rotate ship: <-,->
          * 
          * */
+        movePlayer();
+        rotatePlayer();
+    }
+
+    private void shipToOppositeWall(string wallName)
+    {
+
+    }
+
+    void rotatePlayer()
+    {
+        if (Input.GetKey(rotateLeft))
+        {
+            rb2D.rotation += speed;
+        }
+        else if(Input.GetKey(rotateRight))
+        {
+            rb2D.rotation -= speed;
+        }
+    }
+    void movePlayer()
+    {
+        //move up and right
         if (Input.GetKey(moveUp) && Input.GetKey(moveRight))
         {
             rb2D.velocity = new Vector2(speed, speed);
         }
+        //move up and left
         else if (Input.GetKey(moveUp) && Input.GetKey(moveLeft))
         {
             rb2D.velocity = new Vector2(-speed, speed);
         }
+        //move down and right
         else if (Input.GetKey(moveDown) && Input.GetKey(moveRight))
         {
             rb2D.velocity = new Vector2(speed, -speed);
         }
+        //move down and left
         else if (Input.GetKey(moveDown) && Input.GetKey(moveLeft))
         {
             rb2D.velocity = new Vector2(-speed, -speed);
