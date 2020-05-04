@@ -23,17 +23,28 @@ public class PlayerControls : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-        /*TODO: 1.MoveShip: A,W,S,D
-         *      2.Rotate ship: <-,->
-         * 
-         * */
         movePlayer();
         rotatePlayer();
     }
 
-    private void shipToOppositeWall(string wallName)
+    private void shipToOppositeWall(Transform wallTr2D)
     {
-
+        if(wallTr2D.name == "topWall" && rb2D.transform.position.y > wallTr2D.position.y)
+        {
+            rb2D.position = new Vector2(rb2D.position.x, -rb2D.position.y);
+        }
+        else if (wallTr2D.name == "bottomWall" && rb2D.transform.position.y < wallTr2D.position.y)
+        {
+            rb2D.position = new Vector2(rb2D.position.x, -rb2D.position.y);
+        }
+        else if (wallTr2D.name == "rightWall" && rb2D.transform.position.x > wallTr2D.position.x)
+        {
+            rb2D.position = new Vector2(-rb2D.position.x, rb2D.position.y);
+        }
+        else if (wallTr2D.name == "leftWall" && rb2D.transform.position.x < wallTr2D.position.x)
+        {
+            rb2D.position = new Vector2(-rb2D.position.x, rb2D.position.y);
+        }
     }
 
     void rotatePlayer()
@@ -52,46 +63,45 @@ public class PlayerControls : MonoBehaviour {
         //move up and right
         if (Input.GetKey(moveUp) && Input.GetKey(moveRight))
         {
-            rb2D.velocity = new Vector2(speed, speed);
+            rb2D.AddForce(new Vector2(speed, speed));
         }
         //move up and left
         else if (Input.GetKey(moveUp) && Input.GetKey(moveLeft))
         {
-            rb2D.velocity = new Vector2(-speed, speed);
+            rb2D.AddForce(new Vector2(-speed, speed));
         }
         //move down and right
         else if (Input.GetKey(moveDown) && Input.GetKey(moveRight))
         {
-            rb2D.velocity = new Vector2(speed, -speed);
+            rb2D.AddForce(new Vector2(speed, -speed));
         }
         //move down and left
         else if (Input.GetKey(moveDown) && Input.GetKey(moveLeft))
         {
-            rb2D.velocity = new Vector2(-speed, -speed);
+            rb2D.AddForce(new Vector2(-speed, -speed));
         }
         //move up
         else if (Input.GetKey(moveUp))
         {
-            rb2D.velocity = new Vector2(0, speed);
+            rb2D.AddForce(new Vector2(0, speed));
         }
         //move down
         else if (Input.GetKey(moveDown))
         {
-            rb2D.velocity = new Vector2(0, -speed);
+            rb2D.AddForce(new Vector2(0, -speed));
         }
         //move right
         else if (Input.GetKey(moveRight))
         {
-            rb2D.velocity = new Vector2(speed, 0);
+            rb2D.AddForce(new Vector2(speed, 0));
         }
         //move left
         else if (Input.GetKey(moveLeft))
         {
-            rb2D.velocity = new Vector2(-speed, 0);
+            rb2D.AddForce(new Vector2(-speed, 0));
         }
         else
         {
-            rb2D.velocity = Vector2.zero;
         }
     }
 }

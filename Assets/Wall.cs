@@ -14,8 +14,7 @@ public class Wall : MonoBehaviour {
     {
         //TODO: send ship to opposite wall
         Debug.Log("Old Position " + collision.GetComponent<Rigidbody2D>().transform.position.x + "," + collision.GetComponent<Rigidbody2D>().transform.position.x);
-        string wallName = tr2D.name;
-        collision.gameObject.SendMessage("shipToOppositeWall", wallName);
+        collision.gameObject.SendMessage("shipToOppositeWall", tr2D);
         Debug.Log("New Position " + collision.GetComponent<Rigidbody2D>().transform.position.x + "," + collision.GetComponent<Rigidbody2D>().transform.position.x);
 
     }
