@@ -25,6 +25,12 @@ public class PlayerControls : MonoBehaviour {
     {
         movePlayer();
         rotatePlayer();
+        shoot();
+    }
+
+    private void shoot()
+    {
+        //TODO: shoot projectile
     }
 
     private void shipToOppositeWall(Transform wallTr2D)
