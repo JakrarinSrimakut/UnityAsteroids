@@ -10,9 +10,13 @@ public class PlayerControls : MonoBehaviour {
     public KeyCode moveRight;
     public KeyCode rotateLeft;
     public KeyCode rotateRight;
+    public KeyCode shoot;
 
+    public float projectileForce;
+    public GameObject projectile;
     public float speed = 10f;
 
+    private float beamRotate = 90f;
     private Rigidbody2D rb2D;
 
     void Start()
@@ -25,12 +29,16 @@ public class PlayerControls : MonoBehaviour {
     {
         movePlayer();
         rotatePlayer();
-        shoot();
+        shootProjectile();
     }
 
-    private void shoot()
+    private void shootProjectile()
     {
-        //TODO: shoot projectile
+        if (Input.GetButtonDown("Fire1")){
+            GameObject projectileBeam = Instantiate(projectile, transform.position, transform.rotation);
+            projectileBeam.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.up * projectileForce);
+            Destroy(projectileBeam, 5.0f);
+        }
     }
 
     private void shipToOppositeWall(Transform wallTr2D)
