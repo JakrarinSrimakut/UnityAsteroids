@@ -47,15 +47,15 @@ public class PlayerControls : MonoBehaviour {
         {
             rb2D.position = new Vector2(rb2D.position.x, -rb2D.position.y);
         }
-        else if (wallTr2D.name == "bottomWall" && rb2D.transform.position.y < wallTr2D.position.y)
+        if (wallTr2D.name == "bottomWall" && rb2D.transform.position.y < wallTr2D.position.y)
         {
             rb2D.position = new Vector2(rb2D.position.x, -rb2D.position.y);
         }
-        else if (wallTr2D.name == "rightWall" && rb2D.transform.position.x > wallTr2D.position.x)
+        if (wallTr2D.name == "rightWall" && rb2D.transform.position.x > wallTr2D.position.x)
         {
             rb2D.position = new Vector2(-rb2D.position.x, rb2D.position.y);
         }
-        else if (wallTr2D.name == "leftWall" && rb2D.transform.position.x < wallTr2D.position.x)
+        if (wallTr2D.name == "leftWall" && rb2D.transform.position.x < wallTr2D.position.x)
         {
             rb2D.position = new Vector2(-rb2D.position.x, rb2D.position.y);
         }
