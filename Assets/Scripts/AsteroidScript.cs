@@ -47,7 +47,13 @@ public class AsteroidScript : MonoBehaviour {
         asteroidToOppositeWall();
 	}
 
-    //TODO: Find offset of asteroid to walls
+    //TODO: Asteroid collision
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("projectile collided");
+        Destroy(collision.gameObject);
+    }
+    //Move asteroid to opposite wall when pass wall's boundery
     private void asteroidToOppositeWall()
     {
         if (tr2D.position.y - asteroidOffsetY > screenMaxY)
