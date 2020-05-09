@@ -15,13 +15,31 @@ public class PlayerControls : MonoBehaviour {
     public float projectileForce;
     public GameObject projectile;
     public float speed = 10f;
+    public float shipOffsetY;
+    public float shipOffsetX;
 
-    private float beamRotate = 90f;
+    float screenDepth;
+    Vector3 screenLowerLeftCorner;
+    Vector3 screenUpperRightCorner;
+    float screenMinX;
+    float screenMaxX;
+    float screenMinY;
+    float screenMaxY;
+
     private Rigidbody2D rb2D;
+    private Transform tr2D;
 
     void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
+        tr2D = GetComponent<Transform>();
+        screenDepth = -Camera.main.transform.position.z;
+        screenLowerLeftCorner = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, screenDepth));
+        screenUpperRightCorner = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, screenDepth));
+        screenMinX = screenLowerLeftCorner.x;
+        screenMaxX = screenUpperRightCorner.x;
+        screenMinY = screenLowerLeftCorner.y;
+        screenMaxY = screenUpperRightCorner.y;
     }
     
     // Update is called once per frame
@@ -30,6 +48,7 @@ public class PlayerControls : MonoBehaviour {
         movePlayer();
         rotatePlayer();
         shootProjectile();
+        shipToOppositeWall();
     }
 
     private void shootProjectile()
@@ -41,23 +60,23 @@ public class PlayerControls : MonoBehaviour {
         }
     }
 
-    private void shipToOppositeWall(Transform wallTr2D)
+    private void shipToOppositeWall()
     {
-        if(wallTr2D.name == "topWall" && rb2D.transform.position.y > wallTr2D.position.y)
+        if (tr2D.position.y - shipOffsetY > screenMaxY)
         {
-            rb2D.position = new Vector2(rb2D.position.x, -rb2D.position.y);
+            tr2D.position = new Vector2(tr2D.position.x, screenMinY);
         }
-        if (wallTr2D.name == "bottomWall" && rb2D.transform.position.y < wallTr2D.position.y)
+        if (tr2D.position.y + shipOffsetY < screenMinY)
         {
-            rb2D.position = new Vector2(rb2D.position.x, -rb2D.position.y);
+            tr2D.position = new Vector2(tr2D.position.x, screenMaxY);
         }
-        if (wallTr2D.name == "rightWall" && rb2D.transform.position.x > wallTr2D.position.x)
+        if (tr2D.position.x - shipOffsetX > screenMaxX)
         {
-            rb2D.position = new Vector2(-rb2D.position.x, rb2D.position.y);
+            tr2D.position = new Vector2(screenMinX, tr2D.position.y);
         }
-        if (wallTr2D.name == "leftWall" && rb2D.transform.position.x < wallTr2D.position.x)
+        if (tr2D.position.x + shipOffsetX < screenMinX)
         {
-            rb2D.position = new Vector2(-rb2D.position.x, rb2D.position.y);
+            tr2D.position = new Vector2(screenMaxX, tr2D.position.y);
         }
     }
 

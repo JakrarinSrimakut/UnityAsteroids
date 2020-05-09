@@ -6,18 +6,33 @@ public class AsteroidScript : MonoBehaviour {
 
     public float maxThrust;
     public float maxTorque;
-    private Rigidbody2D rb2D;
 
-    //offset for asteroid to fully pass wall before teleporting it to opposite wall
-    public float screenTopOffset;
-    public float screenBottomOffset;
-    public float screenLeftOffset;
-    public float screenRightOffset;
+    public float asteroidOffsetY;
+    public float asteroidOffsetX;
+
+    private Rigidbody2D rb2D;
+    private Transform tr2D;
+
+    float screenDepth;
+    Vector3 screenLowerLeftCorner;
+    Vector3 screenUpperRightCorner;
+    float screenMinX;
+    float screenMaxX;
+    float screenMinY;
+    float screenMaxY;
 
     // Use this for initialization
     void Start () {
         //add ranodm thrust and torque to asteroid
         rb2D = GetComponent<Rigidbody2D>();
+        tr2D = GetComponent<Transform>();
+        screenDepth = -Camera.main.transform.position.z;
+        screenLowerLeftCorner = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, screenDepth));
+        screenUpperRightCorner = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, screenDepth));
+        screenMinX = screenLowerLeftCorner.x;
+        screenMaxX = screenUpperRightCorner.x;
+        screenMinY = screenLowerLeftCorner.y;
+        screenMaxY = screenUpperRightCorner.y;
 
         Vector2 thrust = new Vector2(Random.Range(-maxThrust, maxThrust), Random.Range(-maxThrust, maxThrust));
         float torque = Random.Range(-maxTorque, maxTorque);
@@ -29,26 +44,27 @@ public class AsteroidScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        asteroidToOppositeWall();
 	}
 
     //TODO: Find offset of asteroid to walls
-    private void asteroidToOppositeWall(Transform wallTr2D)
+    private void asteroidToOppositeWall()
     {
-        if (wallTr2D.name == "topWall" && rb2D.transform.position.y > wallTr2D.position.y)
+        if (tr2D.position.y - asteroidOffsetY > screenMaxY)
         {
-            rb2D.position = new Vector2(rb2D.position.x, -rb2D.position.y);
+            tr2D.position = new Vector2(tr2D.position.x, screenMinY);
         }
-        if (wallTr2D.name == "bottomWall" && rb2D.transform.position.y < wallTr2D.position.y)
+        if (tr2D.position.y + asteroidOffsetY < screenMinY)
         {
-            rb2D.position = new Vector2(rb2D.position.x, -rb2D.position.y);
+            tr2D.position = new Vector2(tr2D.position.x, screenMaxY);
         }
-        if (wallTr2D.name == "rightWall" && rb2D.transform.position.x > wallTr2D.position.x)
+        if (tr2D.position.x - asteroidOffsetX > screenMaxX)
         {
-            rb2D.position = new Vector2(-rb2D.position.x, rb2D.position.y);
+            tr2D.position = new Vector2(screenMinX, tr2D.position.y);
         }
-        if (wallTr2D.name == "leftWall" && rb2D.transform.position.x < wallTr2D.position.x)
+        if (tr2D.position.x + asteroidOffsetX < screenMinX)
         {
-            rb2D.position = new Vector2(-rb2D.position.x, rb2D.position.y);
+            tr2D.position = new Vector2(screenMaxX, tr2D.position.y);
         }
     }
 }
