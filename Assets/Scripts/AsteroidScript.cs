@@ -10,6 +10,8 @@ public class AsteroidScript : MonoBehaviour {
     public float asteroidOffsetY;
     public float asteroidOffsetX;
 
+    public GameObject subAsteroid;
+
     private Rigidbody2D rb2D;
     private Transform tr2D;
 
@@ -50,8 +52,24 @@ public class AsteroidScript : MonoBehaviour {
     //TODO: Asteroid collision
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("projectile collided");
-        Destroy(collision.gameObject);
+        //Check to see if it's a projectile
+        if (collision.CompareTag("projectile"))
+        {
+            //Debug.Log("projectile collided");
+            //destory projectile
+            Destroy(collision.gameObject);
+            //Make subAsteroid if not small asteroid
+            if(subAsteroid != null)
+            {
+                //spawn 2 medium asteroids
+                Instantiate(subAsteroid, transform.position, transform.rotation);
+                Instantiate(subAsteroid, transform.position, transform.rotation);
+            }
+            //remove current asteroid
+            Destroy(gameObject);
+        }
+
+
     }
     //Move asteroid to opposite wall when pass wall's boundery
     private void asteroidToOppositeWall()
