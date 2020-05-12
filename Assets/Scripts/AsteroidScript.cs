@@ -12,6 +12,8 @@ public class AsteroidScript : MonoBehaviour {
 
     public GameObject subAsteroid;
 
+    public int asteroidPoint;
+
     private Rigidbody2D rb2D;
     private Transform tr2D;
 
@@ -65,6 +67,10 @@ public class AsteroidScript : MonoBehaviour {
                 Instantiate(subAsteroid, transform.position, transform.rotation);
                 Instantiate(subAsteroid, transform.position, transform.rotation);
             }
+
+            //update score depending on asteroid destroyed
+            GameSetup.scorePoint(asteroidPoint);
+
             //remove current asteroid
             Destroy(gameObject);
         }

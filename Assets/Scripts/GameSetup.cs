@@ -1,32 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameSetup : MonoBehaviour {
 
-    public Camera mainCam;
-    public BoxCollider2D topWall;
-    public BoxCollider2D bottomWall;
-    public BoxCollider2D leftWall;
-    public BoxCollider2D rightWall;
+    public Text scoreText;
+    public Text livesText;
+    private int lives = 3;
+    private int score = 0;
 
     // Use this for initialization
     void Start () {
-        //topWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(Screen.width, 0f, 0f)).x * 2f, 1f);
-        //topWall.offset = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, Screen.height, 0f)).y + 0.5f);
-
-        //bottomWall.size = topWall.size;
-        //bottomWall.offset = -topWall.offset;
-
-        //leftWall.size = new Vector2(1f, mainCam.ScreenToWorldPoint(new Vector3(0f, Screen.height, 0f)).y * 2f);
-        //leftWall.offset = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(0f, 0f, 0f)).x - 0.5f, 0f);
-
-        //rightWall.size = leftWall.size;
-        //rightWall.offset = -leftWall.offset;
+        scoreText.text = "Score: " + score;
+        livesText.text = "Lives: " + lives;
     }
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    //score increment
+    public void scorePoint(int point)
+    {
+        score += point;
+        scoreText.text = "Score: " + score;
+    }
+
+    //life decrement
+    public void lossLife()
+    {
+        lives--;
+        livesText.text = "Lives: " + lives;
+    }
+
+
 }

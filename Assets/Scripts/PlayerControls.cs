@@ -19,6 +19,7 @@ public class PlayerControls : MonoBehaviour {
     public float shipOffsetY;
     public float shipOffsetX;
     public float deathForce;
+    public GameSetup gameSetup;
 
     float screenDepth;
     Vector3 screenLowerLeftCorner;
@@ -58,13 +59,13 @@ public class PlayerControls : MonoBehaviour {
         movePlayer();
     }
 
-    //TODO: Player collision
+    //player collision 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("collision mag: " + collision.relativeVelocity.magnitude);
         if(collision.relativeVelocity.magnitude > deathForce)
         {
-            Debug.Log("Death");
+            //TODO: use gameSetup object to decrement life
         }
     }
     private void shootProjectile()
