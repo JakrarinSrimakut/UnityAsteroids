@@ -1,18 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AsteroidScript : MonoBehaviour {
 
     public float maxThrust;
     public float maxTorque;
-
     public float asteroidOffsetY;
     public float asteroidOffsetX;
-
     public GameObject subAsteroid;
-
     public int asteroidPoint;
+    public GameObject player;
 
     private Rigidbody2D rb2D;
     private Transform tr2D;
@@ -27,6 +26,9 @@ public class AsteroidScript : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        //find player
+        player = GameObject.FindWithTag("Player");
+
         //add ranodm thrust and torque to asteroid
         rb2D = GetComponent<Rigidbody2D>();
         tr2D = GetComponent<Transform>();
@@ -51,7 +53,7 @@ public class AsteroidScript : MonoBehaviour {
         asteroidToOppositeWall();
 	}
 
-    //TODO: Asteroid collision
+    // Asteroid collision
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Check to see if it's a projectile
@@ -68,15 +70,14 @@ public class AsteroidScript : MonoBehaviour {
                 Instantiate(subAsteroid, transform.position, transform.rotation);
             }
 
-            //update score depending on asteroid destroyed
-            GameSetup.scorePoint(asteroidPoint);
+            //Tell player to update score
+            player.SendMessage("scorePoint", asteroidPoint);
 
             //remove current asteroid
             Destroy(gameObject);
         }
-
-
     }
+
     //Move asteroid to opposite wall when pass wall's boundery
     private void asteroidToOppositeWall()
     {

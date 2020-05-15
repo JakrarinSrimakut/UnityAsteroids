@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerControls : MonoBehaviour {
 
@@ -19,8 +20,11 @@ public class PlayerControls : MonoBehaviour {
     public float shipOffsetY;
     public float shipOffsetX;
     public float deathForce;
-    public GameSetup gameSetup;
+    public Text livesText;
+    public Text scoreText;
 
+    private int lives = 3;
+    private int score = 0;
     float screenDepth;
     Vector3 screenLowerLeftCorner;
     Vector3 screenUpperRightCorner;
@@ -34,6 +38,9 @@ public class PlayerControls : MonoBehaviour {
 
     void Start()
     {
+        livesText.text = "Lives: " + lives;
+        scoreText.text = "Score: " + score;
+
         rb2D = GetComponent<Rigidbody2D>();
         tr2D = GetComponent<Transform>();
         screenDepth = -Camera.main.transform.position.z;
@@ -65,9 +72,27 @@ public class PlayerControls : MonoBehaviour {
         Debug.Log("collision mag: " + collision.relativeVelocity.magnitude);
         if(collision.relativeVelocity.magnitude > deathForce)
         {
-            //TODO: use gameSetup object to decrement life
+            lossLife();
         }
     }
+
+    //score increment
+    public void scorePoint(int point)
+    {
+        score += point;
+        scoreText.text = "Score: " + score;
+        Debug.Log("score: " + score);
+    }
+
+    //life decrement
+    public void lossLife()
+    {
+        lives--;
+        livesText.text = "Lives: " + lives;
+
+        Debug.Log("Lives: " + lives);
+    }
+
     private void shootProjectile()
     {
         if (Input.GetButtonDown("Fire1")){
