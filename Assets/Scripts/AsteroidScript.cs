@@ -12,6 +12,8 @@ public class AsteroidScript : MonoBehaviour {
     public GameObject subAsteroid;
     public int asteroidPoint;
     public GameObject player;
+    public GameObject explosion;
+    public AudioSource audio;
 
     private Rigidbody2D rb2D;
     private Transform tr2D;
@@ -72,6 +74,10 @@ public class AsteroidScript : MonoBehaviour {
 
             //Tell player to update score
             player.SendMessage("scorePoint", asteroidPoint);
+
+            //Make Explostion
+            GameObject newExplosion = Instantiate(explosion, transform.position, transform.rotation);
+            Destroy(newExplosion, 3f);
 
             //remove current asteroid
             Destroy(gameObject);

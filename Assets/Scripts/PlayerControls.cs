@@ -22,6 +22,8 @@ public class PlayerControls : MonoBehaviour {
     public float deathForce;
     public Text livesText;
     public Text scoreText;
+    public AudioSource audio;
+    public GameObject explosion;
 
     private int lives = 3;
     private int score = 0;
@@ -74,6 +76,10 @@ public class PlayerControls : MonoBehaviour {
         {
             lossLife();
         }
+        else
+        { 
+            audio.Play();
+        }
     }
 
     //score increment
@@ -88,9 +94,16 @@ public class PlayerControls : MonoBehaviour {
     public void lossLife()
     {
         lives--;
-        livesText.text = "Lives: " + lives;
+        //Make Explosion
+        GameObject newExplosion = Instantiate(explosion, transform.position, transform.rotation);
+        Destroy(newExplosion, 3f);
 
-        Debug.Log("Lives: " + lives);
+        livesText.text = "Lives: " + lives;
+        if(lives < 0)
+        {
+            //GameOver
+        }
+
     }
 
     private void shootProjectile()
