@@ -24,7 +24,11 @@ public class PlayerControls : MonoBehaviour {
     public Text scoreText;
     public AudioSource audio;
     public GameObject explosion;
+    public Color inColor;
+    public Color normalColor;
 
+    private float thrustInput;
+    private float turnInput;
     private int lives = 3;
     private int score = 0;
     float screenDepth;
@@ -57,7 +61,8 @@ public class PlayerControls : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-
+        thrustInput = Input.GetAxis("Vertical");
+        turnInput = Input.GetAxis("Horizontal");
         rotatePlayer();
         shootProjectile();
         shipToOppositeWall();
@@ -68,6 +73,23 @@ public class PlayerControls : MonoBehaviour {
         movePlayer();
     }
 
+    void respawn()
+    {
+        rb2D.velocity = Vector2.zero;
+        transform.position = Vector2.zero;
+
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        sr.enabled = true;
+        sr.color = inColor;
+        Invoke("invulnerable", 3f);
+    }
+
+    void invulnerable()
+    {
+        GetComponent<Collider2D>().enabled = true;
+        GetComponent<SpriteRenderer>().color = normalColor;
+    }
+
     //player collision 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -75,6 +97,9 @@ public class PlayerControls : MonoBehaviour {
         if(collision.relativeVelocity.magnitude > deathForce)
         {
             lossLife();
+            GetComponent<SpriteRenderer>().enabled = false;
+            GetComponent<Collider2D>().enabled = false;
+            Invoke("respawn", 3f);
         }
         else
         { 
@@ -138,14 +163,17 @@ public class PlayerControls : MonoBehaviour {
     //rotate ship
     void rotatePlayer()
     {
-        if (Input.GetKey(rotateLeft))
-        {
-            tr2D.Rotate(Vector3.forward * Time.deltaTime * turnThrust);
-        }
-        else if(Input.GetKey(rotateRight))
-        {
-            tr2D.Rotate(-Vector3.forward * Time.deltaTime * turnThrust);
-        }
+        transform.Rotate(Vector3.forward * -turnInput * Time.deltaTime *turnThrust);
+        //if (Input.GetKey(rotateLeft))
+        //{
+        //    //rb2D.AddTorque(turnThrust);
+        //    tr2D.Rotate(Vector3.forward * Time.deltaTime * turnThrust);
+        //}
+        //else if(Input.GetKey(rotateRight))
+        //{
+        //    //rb2D.AddTorque(-turnThrust);
+        //    tr2D.Rotate(-Vector3.forward * Time.deltaTime * turnThrust);
+        //}
     }
 
     //move ship
@@ -174,7 +202,7 @@ public class PlayerControls : MonoBehaviour {
         //move up
         if (Input.GetKey(moveUp))
         {
-            rb2D.AddRelativeForce(Vector2.up * thrust * Time.deltaTime);
+            rb2D.AddRelativeForce(Vector2.up * thrustInput * thrust);
         }
         //move down
         //else if (Input.GetKey(moveDown))
