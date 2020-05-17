@@ -13,7 +13,7 @@ public class AsteroidScript : MonoBehaviour {
     public int asteroidPoint;
     public GameObject player;
     public GameObject explosion;
-    public AudioSource audio;
+    public GameManager gm;
 
     private Rigidbody2D rb2D;
     private Transform tr2D;
@@ -28,9 +28,6 @@ public class AsteroidScript : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        //find player
-        player = GameObject.FindWithTag("Player");
-
         //add ranodm thrust and torque to asteroid
         rb2D = GetComponent<Rigidbody2D>();
         tr2D = GetComponent<Transform>();
@@ -47,11 +44,15 @@ public class AsteroidScript : MonoBehaviour {
 
         rb2D.AddForce(thrust);
         rb2D.AddTorque(torque);
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
+
+        //find player
+        player = GameObject.FindWithTag("Player");
+        //find the Game Manager
+        gm = GameObject.FindObjectOfType<GameManager>();
+    }
+
+    // Update is called once per frame
+    void Update () {
         asteroidToOppositeWall();
 	}
 
@@ -70,6 +71,11 @@ public class AsteroidScript : MonoBehaviour {
                 //spawn 2 medium asteroids
                 Instantiate(subAsteroid, transform.position, transform.rotation);
                 Instantiate(subAsteroid, transform.position, transform.rotation);
+                gm.UpdateNumberOfAsteroids(1);
+            }
+            else
+            {
+                gm.UpdateNumberOfAsteroids(-1);
             }
 
             //Tell player to update score
