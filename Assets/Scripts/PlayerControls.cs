@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerControls : MonoBehaviour {
 
@@ -26,10 +27,11 @@ public class PlayerControls : MonoBehaviour {
     public GameObject explosion;
     public Color inColor;
     public Color normalColor;
+    public GameObject gameOverPanel;
 
     private float thrustInput;
     private float turnInput;
-    private int lives = 3;
+    public int lives;
     private int score = 0;
     float screenDepth;
     Vector3 screenLowerLeftCorner;
@@ -100,6 +102,11 @@ public class PlayerControls : MonoBehaviour {
             GetComponent<SpriteRenderer>().enabled = false;
             GetComponent<Collider2D>().enabled = false;
             Invoke("respawn", 3f);
+            if (lives <= 0)
+            {
+                //GameOver
+                gameOver();
+            }
         }
         else
         { 
@@ -124,11 +131,18 @@ public class PlayerControls : MonoBehaviour {
         Destroy(newExplosion, 3f);
 
         livesText.text = "Lives: " + lives;
-        if(lives < 0)
-        {
-            //GameOver
-        }
 
+    }
+
+    void gameOver()
+    {
+        CancelInvoke();
+        gameOverPanel.SetActive(true);
+    }
+
+    public void playAgain()
+    {
+        SceneManager.LoadScene("MainLevel");
     }
 
     private void shootProjectile()
