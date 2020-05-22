@@ -28,11 +28,15 @@ public class PlayerControls : MonoBehaviour {
     public Color inColor;
     public Color normalColor;
     public GameObject gameOverPanel;
+    public SpriteRenderer spriteRenderer;
+    public Collider2D collider;
 
     private float thrustInput;
     private float turnInput;
     public int lives;
     private int score = 0;
+    private bool isHyperspace;  //true - currently hyperspacing
+
     float screenDepth;
     Vector3 screenLowerLeftCorner;
     Vector3 screenUpperRightCorner;
@@ -48,6 +52,7 @@ public class PlayerControls : MonoBehaviour {
     {
         livesText.text = "Lives: " + lives;
         scoreText.text = "Score: " + score;
+        isHyperspace = false;
 
         rb2D = GetComponent<Rigidbody2D>();
         tr2D = GetComponent<Transform>();
@@ -68,6 +73,15 @@ public class PlayerControls : MonoBehaviour {
         rotatePlayer();
         shootProjectile();
         shipToOppositeWall();
+        if (Input.GetButtonDown("Hyperspace") && !isHyperspace)
+        {
+            isHyperspace = true;
+            //Turn off colliders and spriteRenderer
+            spriteRenderer.enabled = false;
+            collider.enabled = false;
+            Invoke("hyperspace", 1f);
+
+        }
     }
 
     private void FixedUpdate()
@@ -75,21 +89,32 @@ public class PlayerControls : MonoBehaviour {
         movePlayer();
     }
 
+    void hyperspace()
+    {
+        //Move to a new random position
+        Vector2 newPosition = new Vector2(Random.Range(screenMinX + shipOffsetX, screenMaxX - shipOffsetX), Random.Range(screenMinY + shipOffsetY, screenMaxY - shipOffsetY));
+        transform.position = newPosition;
+        //Turn on colliders and spriteRenderer
+        spriteRenderer.enabled = true;
+        collider.enabled = true;
+
+        isHyperspace = false;
+    }
+
     void respawn()
     {
         rb2D.velocity = Vector2.zero;
         transform.position = Vector2.zero;
 
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        sr.enabled = true;
-        sr.color = inColor;
+        spriteRenderer.enabled = true;
+        spriteRenderer.color = inColor;
         Invoke("invulnerable", 3f);
     }
 
     void invulnerable()
     {
-        GetComponent<Collider2D>().enabled = true;
-        GetComponent<SpriteRenderer>().color = normalColor;
+        collider.enabled = true;
+        spriteRenderer.color = normalColor;
     }
 
     //player collision 
@@ -99,8 +124,8 @@ public class PlayerControls : MonoBehaviour {
         if(collision.relativeVelocity.magnitude > deathForce)
         {
             lossLife();
-            GetComponent<SpriteRenderer>().enabled = false;
-            GetComponent<Collider2D>().enabled = false;
+            spriteRenderer.enabled = false;
+            collider.enabled = false;
             Invoke("respawn", 3f);
             if (lives <= 0)
             {
