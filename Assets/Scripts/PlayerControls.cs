@@ -117,36 +117,6 @@ public class PlayerControls : MonoBehaviour {
         spriteRenderer.color = normalColor;
     }
 
-    //player collision 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("collision mag: " + collision.relativeVelocity.magnitude);
-        if(collision.relativeVelocity.magnitude > deathForce)
-        {
-            lossLife();
-            spriteRenderer.enabled = false;
-            collider.enabled = false;
-            Invoke("respawn", 3f);
-            if (lives <= 0)
-            {
-                //GameOver
-                gameOver();
-            }
-        }
-        else
-        { 
-            audio.Play();
-        }
-    }
-
-    //score increment
-    public void scorePoint(int point)
-    {
-        score += point;
-        scoreText.text = "Score: " + score;
-        Debug.Log("score: " + score);
-    }
-
     //life decrement
     public void lossLife()
     {
@@ -157,6 +127,44 @@ public class PlayerControls : MonoBehaviour {
 
         livesText.text = "Lives: " + lives;
 
+        spriteRenderer.enabled = false;
+        collider.enabled = false;
+        Invoke("respawn", 3f);
+        if (lives <= 0)
+        {
+            //GameOver
+            gameOver();
+        }
+    }
+
+    //player collision 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("collision mag: " + collision.relativeVelocity.magnitude);
+        if(collision.relativeVelocity.magnitude > deathForce)
+        {
+            lossLife();
+        }
+        else
+        { 
+            audio.Play();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("alienbeam"))
+        {
+            lossLife();
+        }
+    }
+
+    //score increment
+    public void scorePoint(int point)
+    {
+        score += point;
+        scoreText.text = "Score: " + score;
+        Debug.Log("score: " + score);
     }
 
     void gameOver()
