@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
     public int numberOfAsteroids; //This is the current number of asteroids in the scene
     public int levelNumber = 1;
     public GameObject asteroid;
+    public GameObject alien;
 
     float screenDepth;
     Vector3 screenLowerLeftCorner;

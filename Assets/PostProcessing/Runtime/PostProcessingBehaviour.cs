@@ -99,7 +99,7 @@ namespace UnityEngine.PostProcessing
 #if UNITY_EDITOR
             // Track the scene view camera to disable some effects we don't want to see in the
             // scene view
-            // Currently disabled effects :
+            // Currently isDisabled effects :
             //  - Temporal Antialiasing
             //  - Depth of Field
             //  - Motion blur
