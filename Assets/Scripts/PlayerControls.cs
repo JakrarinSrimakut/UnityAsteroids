@@ -30,6 +30,8 @@ public class PlayerControls : MonoBehaviour {
     public GameObject gameOverPanel;
     public SpriteRenderer spriteRenderer;
     public Collider2D collider;
+    public AlienScript alien;
+    public int currentLevel = 0;
 
     private float thrustInput;
     private float turnInput;
@@ -156,6 +158,7 @@ public class PlayerControls : MonoBehaviour {
         if (collision.CompareTag("alienbeam"))
         {
             lossLife();
+            alien.disable(); //disable alien until next level so it won't barrage player when respawning
         }
     }
 

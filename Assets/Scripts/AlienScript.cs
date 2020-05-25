@@ -18,16 +18,15 @@ public class AlienScript : MonoBehaviour {
     public bool isDisabled;   //true when currently disabled
     public int points;
     public float timeBeforeSpawning;
-    public float levelStartTime;
     public Transform startPosition;
+    public int currentLevel = 0;
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         player = GameObject.FindWithTag ("Player").transform;
-        levelStartTime = Time.time;
-        timeBeforeSpawning = Random.Range(5f, 10f);
-        Invoke("enable", timeBeforeSpawning);
+
+        newLevel();
         disable();
 	}
 	
@@ -61,6 +60,19 @@ public class AlienScript : MonoBehaviour {
         rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
     }
 
+    public void newLevel()
+    {
+        disable();  //disable alien if player goes to next level without destorying alien
+        currentLevel++;
+
+        timeBeforeSpawning = Random.Range(5f, 20f);
+        Invoke("enable", timeBeforeSpawning);
+
+        speed = currentLevel;
+        bulletSpeed = 250 * currentLevel;
+        points = 500 * currentLevel;
+    }
+
     private void enable()
     {
         //Move to start position
@@ -72,7 +84,7 @@ public class AlienScript : MonoBehaviour {
 
     }
 
-    private void disable()
+    public void disable()
     {
         //turn of collider and sprite renderer
         collider.enabled = false;
@@ -88,6 +100,18 @@ public class AlienScript : MonoBehaviour {
             player.SendMessage("scorePoint", points);
 
             //Destroy the alien
+            //Explosion
+            GameObject newExplosion = Instantiate(explosion, transform.position, transform.rotation);
+            Destroy(newExplosion, 3f);
+            disable();
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.CompareTag("Player"))
+        {
+
             //Explosion
             GameObject newExplosion = Instantiate(explosion, transform.position, transform.rotation);
             Destroy(newExplosion, 3f);

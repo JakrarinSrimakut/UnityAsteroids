@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
     public int numberOfAsteroids; //This is the current number of asteroids in the scene
     public int levelNumber = 1;
     public GameObject asteroid;
-    public GameObject alien;
+    public AlienScript alien;
 
     float screenDepth;
     Vector3 screenLowerLeftCorner;
@@ -53,6 +53,9 @@ public class GameManager : MonoBehaviour {
             Instantiate(asteroid, spawnPosition, Quaternion.identity);
             numberOfAsteroids++;
         }
+
+        //Setup the alien
+        alien.newLevel();
     }
 
 
