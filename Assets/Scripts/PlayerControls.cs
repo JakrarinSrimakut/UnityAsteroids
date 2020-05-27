@@ -177,7 +177,12 @@ public class PlayerControls : MonoBehaviour {
 
     public void playAgain()
     {
-        SceneManager.LoadScene("MainLevel");
+        SceneManager.LoadScene("Main");
+    }
+
+    public void goToMainMenu()
+    {
+        SceneManager.LoadScene("StartMenu");
     }
 
     private void shootProjectile()
