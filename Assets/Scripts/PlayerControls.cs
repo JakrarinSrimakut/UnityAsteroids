@@ -31,7 +31,6 @@ public class PlayerControls : MonoBehaviour {
     public SpriteRenderer spriteRenderer;
     public Collider2D collider;
     public AlienScript alien;
-    public int currentLevel = 0;
 
     private float thrustInput;
     private float turnInput;
