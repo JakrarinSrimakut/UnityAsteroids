@@ -31,6 +31,7 @@ public class PlayerControls : MonoBehaviour {
     public SpriteRenderer spriteRenderer;
     public Collider2D collider;
     public AlienScript alien;
+    public GameManager gm;
 
     private float thrustInput;
     private float turnInput;
@@ -173,6 +174,8 @@ public class PlayerControls : MonoBehaviour {
     {
         CancelInvoke();
         gameOverPanel.SetActive(true);
+        //Tell the GameManager to check for high scores
+        gm.CheckForHighScore(score);
     }
 
     public void playAgain()
