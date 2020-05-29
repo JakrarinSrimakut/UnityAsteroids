@@ -32,6 +32,9 @@ public class PlayerControls : MonoBehaviour {
     public Collider2D collider;
     public AlienScript alien;
     public GameManager gm;
+    public GameObject newHighScorePanel;
+    public InputField highScoreInput;
+    public Text highScoreListText;
 
     private float thrustInput;
     private float turnInput;
@@ -173,9 +176,29 @@ public class PlayerControls : MonoBehaviour {
     void gameOver()
     {
         CancelInvoke();
-        gameOverPanel.SetActive(true);
+
         //Tell the GameManager to check for high scores
-        gm.CheckForHighScore(score);
+        if (gm.CheckForHighScore(score))
+        {
+            newHighScorePanel.SetActive(true);
+        }
+        else
+        {
+            gameOverPanel.SetActive(true);
+            highScoreListText.text = "HIGH SCORE" + "\n" + "\n" + PlayerPrefs.GetString("highscoreName") + " " + PlayerPrefs.GetInt("highscore");
+        }
+    }
+
+    //User input initials then open gamevoer panel
+    public void HighScoreInput()
+    {
+        string newInput = highScoreInput.text;
+        Debug.Log(newInput);
+        newHighScorePanel.SetActive(false);
+        gameOverPanel.SetActive(true);
+        PlayerPrefs.SetString("highscoreName", newInput);
+        PlayerPrefs.SetInt("highscore", score);
+        highScoreListText.text = "HIGH SCORE" + "\n" + "\n" + PlayerPrefs.GetString("highscoreName") + " " + PlayerPrefs.GetInt("highscore");
     }
 
     public void playAgain()
